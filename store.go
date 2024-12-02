@@ -3,10 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/jackc/pgx"
-	"golang.org/x/crypto/ssh"
-	"log"
 	"os"
-	"time"
 )
 
 type Contact struct {
@@ -26,26 +23,16 @@ type store struct {
 	conn *pgx.Conn
 }
 
+var connected = false
+
 func NewStore() *store {
-	tunnel := NewSSHTunnel(
-		"sviatkyo@sviatkyou.cv.ua",
-		ssh.Password("Thegovernmentsucks1488!"), // 2. password
-		// The destination host and port of the actual server.
-		"localhost:5433",
-	)
-	// You can provide a logger for debugging, or remove this line to
-	// make it silent.
-	tunnel.Log = log.New(os.Stdout, "", log.Ldate|log.Lmicroseconds)
-	// Start the server in the background. You will need to wait a
-	// small amount of time for it to bind to the localhost port
-	// before you can start sending connections.
-	go func() {
-		err := tunnel.Start()
-		if err != nil {
-			fmt.Println(err)
-		}
-	}()
-	time.Sleep(1000 * time.Millisecond)
+	//tunnel := NewSSHTunnel(
+	//	"sviatkyo@sviatkyou.cv.ua",
+	//	ssh.Password("Thegovernmentsucks1488!"), // 2. password
+	//	// The destination host and port of the actual server.
+	//	"localhost:5433",
+	//)
+	tunel()
 
 	conn, err := pgx.Connect(pgx.ConnConfig{Host: "localhost:5433", User: "sviatkyo", Password: "Thegovernmentsucks1488!", Database: "sviatkyo_contacts"})
 	if err != nil {
