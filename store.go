@@ -48,18 +48,18 @@ func NewStore() *store {
 }
 
 func (s store) Add(data Contact) error {
-	//var err error
+	var err error
 
-	//contacts, err := s.GetAll()
-	//if err != nil {
-	//	return err
-	//}
-	//
-	//if len(contacts) > 0 {
-	//	data.Id = contacts[len(contacts)-1].Id + 1
-	//} else {
-	//	data.Id = 0
-	//}
+	contacts, err := s.GetAll()
+	if err != nil {
+		return err
+	}
+
+	if len(contacts) > 0 {
+		data.Id = contacts[len(contacts)-1].Id + 1
+	} else {
+		data.Id = 0
+	}
 
 	//data.Date = time.Now().Format("2006-01-02 15:04:05")
 
@@ -70,7 +70,7 @@ func (s store) Add(data Contact) error {
 	//}
 	//fmt.Println(jsonData)
 
-	return s.conn.QueryRow("insert into contacts values ($2, $3, $4)", data.Name, data.Email, data.Phone).Scan(&data.Id)
+	return s.conn.QueryRow("insert into contacts values ($1, $2, $3, $4)", data.Id, data.Name, data.Email, data.Phone).Scan(&data.Id)
 }
 
 func (s store) GetAll() ([]Contact, error) {
